@@ -1,4 +1,11 @@
 terraform {
+  cloud{
+    organization = "piartz-org"
+    workspaces {
+      name = "piartz-ws"
+    }
+  }
+  
   required_providers {
     aws = {
       source  = "hashicorp/aws"
@@ -14,14 +21,14 @@ provider "aws" {
 }
 
 resource "aws_instance" "app_server" {
-  ami           = "ami-0ce4b8a18a8605eff"
-  instance_type = "t2.micro"
+  ami           = var.instance_ami
+  instance_type = var.instance_type
   key_name = "ec2key"
   vpc_security_group_ids = [aws_security_group.main.id]
 
 
   tags = {
-    Name = "MartinServer"
+    Name = var.instance_name
   }
 }
 
